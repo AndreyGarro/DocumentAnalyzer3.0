@@ -1,0 +1,27 @@
+import React, {Fragment, useRef, onChange} from 'react';
+import Button from '@material-ui/core/Button'
+import Typography from '@material-ui/core/Typography'
+
+const Upload = () => {
+  const uploadInputRef = useRef(null);
+  console.log(uploadInputRef);
+
+return (
+  <Fragment>
+    <input
+      ref={uploadInputRef}
+      type="file"
+      accept="image/*"
+      style={{ display: "none" }}
+      onChange={onChange}/>
+    <Button
+      onClick={() => uploadInputRef.current && uploadInputRef.current.click()}
+      variant="contained"
+    >
+      Upload
+    </Button>
+  </Fragment>
+  );
+}
+
+export default Upload;
