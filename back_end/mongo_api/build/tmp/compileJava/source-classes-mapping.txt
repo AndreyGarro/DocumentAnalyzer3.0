@@ -1,0 +1,12 @@
+com/database/connection/SentimentResult.java
+ com.database.connection.SentimentResult
+com/database/connection/Person.java
+ com.database.connection.Person
+com/database/mongo/MongoApplication.java
+ com.database.mongo.MongoApplication
+com/database/connection/MongoConnectionHelper.java
+ com.database.connection.MongoConnectionHelper
+com/database/connection/MongoConnection.java
+ com.database.connection.MongoConnection
+com/database/mongo/MongoResource.java
+ com.database.mongo.MongoResource

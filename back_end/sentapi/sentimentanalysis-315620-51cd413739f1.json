@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "sentimentanalysis-315620",
+  "private_key_id": "51cd413739f12b929b08972045ded5a4ab8478ef",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDDZZX1m0O3UAvV\nZWs93YYIEQV0DrjZdxcuG0nAPwUlhxdzr9mywASbZFL3HB/EJnOs3GkNHD7uCMP4\nwWZweuO367cclehs7pKJyzzznUsC5RW1AKeEb65NCNMZV09AhUto8cX77Nr5p6II\nktwGxK+brB5H0CsiP+vg08wGnX0AkIMm9En37LsYvCdlA3o6sru6E9bLrc8tr8/x\npqfSUJhLUVOdstJcx65sKvYKOipVQrujXqTt/zXhBLKiVw7llgzaPmbVZkyhlbHr\ngzZM0BINsmo0bm8ioFRwEwl2tG8ZcPZg04WztWz9voJOJUuKuWST65jKd8pWB4SX\nkBOup0KlAgMBAAECggEAAwkiv8+t+BARDapdsGn7smoE4mMXkRKNkTDUCqZbu2T5\n4sgu6EeudmAKhmbMvTXBQdFXrqzpP9hP/A4RjSUL40ldxM2bfTJuI35F0xlMP9OM\nNSusWUGrqaf1SrU/IT6A585e/nM7mznXJaDrZ+MMBXZH6sDNzsBL2UYaKx2Kwmjo\nmYse9X4jK11ZLR6QoRz90bkftdfiupIl6xpwq0ekys2EZ6WwxwtQ1RtMArZoir89\n66So3s6hqrvjVANKmnMzoFuQ3OwrY+HDCsI0h9VZ30ydl6S0vRDZsUVCrZy1ID8t\nIomNmVa6W/dsxAXNb4TzsTxUAXaZ4tXBh07EgmttYQKBgQDppcLQ/kWa7eiLKrz/\nutE9yNb5me5mCmEaOkJcmqD1I2+ySY7BADLopy8mJXOInlyk3y4UaNeWXA3EfOWy\nOlvtbj2t+PpbuS7bljyrOKfnUoHNQQ5dz2Za7MQjnAi6egArB3NFgeHD7Qhhh6rO\neCX1ifYMuyf3gOWu6+LeC/6GRQKBgQDWFwfnCeVhYyNLWe6tCKCccxB+zLdrCNik\nUCDJwZ3K/tZpDi+z5aUMzPnSS+6f2SwpaMm5CapUlN7PoYwK9xkzMK85j8hIgl4Q\nlGW15DXAQWawY1UcJdV6Cr1AAadxUY9l0rwo2xK3BElX/VO/8VpRozMS4cfXzT9p\nai42h/pA4QKBgA8yuBxuHcr5JMJAsnCUD15MfSdZSveaPzy8g2qQqF2pw28+d6m4\nQJd/oIKDtyMw4efbmJy9QSDHtiGM2kggobAtFpgFdQuYXSLtf97HXayfYlAepjeV\n8RuDATMryCmRHAewgWAJFc1v0ra9Y2/wws9Y/QdQ+UWRPd+F+ojlENZdAoGAIUf7\nRoNXUUhkGDamz+djcG7CxbN1YAJEC2cZccPTj9cF5db6u3Cbs925iGOdeOP95YIQ\nud8yx2tNJ+HpL1syY67RzpT3ga4iiVlIZnpPkM+Z8xm+BV4sTYiV2vlm2krfi+iy\nr3c+9YyJClCrUE9oxwAj1G+c7YNOtEh5XqjM0oECgYEA4ruHQzlgNaGuR3xNOPjv\nPTYjOaSUAqbtalL5t/KwWJkqEdiMl7r+UvqaWwByy3BO+GFKN0E9Pjtf/oJRuR3W\n0NCYT2uscM80WAcTRd8zeW1S2DileO4ECO1IM5XePDwnAClgw+DW1S60HML16qik\niye5xVNORU6I/RUFWxKtO90=\n-----END PRIVATE KEY-----\n",
+  "client_email": "sent-487@sentimentanalysis-315620.iam.gserviceaccount.com",
+  "client_id": "104594687267247103233",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sent-487%40sentimentanalysis-315620.iam.gserviceaccount.com"
+}

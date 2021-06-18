@@ -1,0 +1,273 @@
+
+version: "3.2"
+services:
+
+  # _________________________________Building the rabbitmq service__________________________
+
+  rabbitmq:
+    # Pulling the image with rabbitmq:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    # Naming the container:
+    container_name: 'rabbitmq'
+    # Exporting the required ports:
+    ports:
+        - '5673:5673'
+        - '5672:5672'
+        - '15672:15672'
+    # Assigning the network to the container:
+    networks:
+      network:
+        ipv4_address: 192.168.48.2
+    # Checking the health of the server by trying conections:
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "15672"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  # _________________________________Building the nlp service (1)__________________________
+
+  nlp1:
+    # Calling the Dockerfile inside broker_src for building the container:
+    build: ./nlp
+    container_name: 'nlp1'
+    environment:
+      # The location of the RabbitMQ server.  "amqp" is the protocol;
+      # "rabbitmq" is the hostname.  Note that there is not a guarantee
+      # that the server will start first!  Telling the pika client library
+      # to try multiple times gets around this ordering issue.
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=20&retry_delay=5'
+    # This command stablish that this container is ready only when rabbitmq service is up:
+    depends_on:
+       rabbitmq:
+        condition: service_healthy
+    # Assigning the network to the container:
+    networks:
+      - network
+      - mongo_net
+    volumes:
+      - shared_files:/broker_src/tmp_files
+
+  # _________________________________Building the nlp service (2)__________________________
+
+  nlp2:
+    # Calling the Dockerfile inside broker_src for building the container:
+    build: ./nlp
+    container_name: 'nlp2'
+    environment:
+      # The location of the RabbitMQ server.  "amqp" is the protocol;
+      # "rabbitmq" is the hostname.  Note that there is not a guarantee
+      # that the server will start first!  Telling the pika client library
+      # to try multiple times gets around this ordering issue.
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=20&retry_delay=5'
+    # This command stablish that this container is ready only when rabbitmq service is up:
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    # Assigning the network to the container:
+    networks:
+      - network
+      - mongo_net
+    volumes:
+      - shared_files:/broker_src/tmp_files
+
+
+  # __________________________Building the storage service (1) and (2)__________________________
+
+  storage1:
+    build: ./storage
+    container_name: 'storage1'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=20&retry_delay=5'
+    volumes:
+      - shared_files:/storage_api/tempfile
+    networks:
+      - network
+    
+  storage2:
+    build: ./storage
+    container_name: 'storage2'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=20&retry_delay=5'
+    volumes:
+      - shared_files:/storage_api/tempfile
+    networks:
+      - network
+
+  # __________________________Building the sql sever service__________________________
+
+  sqlserver:
+    container_name: 'sql_server'
+    image: mcr.microsoft.com/mssql/server:latest
+    build: 
+      context: .
+      dockerfile: sql_server/Dockerfile
+    ports: 
+      - "1433:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+    networks: 
+      sql_net: 
+        ipv4_address: 192.168.32.2
+
+  sqlserver_api: 
+    container_name: 'sqlserver_api'
+    build: ./sql_api
+    ports: 
+      - "9080:9080"
+    environment:
+      - ConnectionString=Data Source=server;Initial Catalog=proyect2_database;User Id=sa;Password=ProyectSOA123;Pooling=False;Max Pool Size=200;MultipleActiveResultSets=True
+    depends_on: 
+      - sqlserver
+    networks: 
+      sql_net: 
+        ipv4_address: 192.168.32.6
+  
+  sqlserver_broker:
+    build: ./sqlserver_broker
+    container_name: 'sqlserver_broker'
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=20&retry_delay=5'
+    networks:
+      - network
+      - sql_net
+
+  # __________________________Building the front api service__________________________
+  front_api:
+    build: ./translatorAPI
+    container_name: 'front_api'
+    ports:
+      - "4000:4000"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      #keycloak:
+       # condition: service_healthy
+    networks:
+      - network
+      - keycloak_net
+
+  
+  # __________________________Building the mongo api service__________________________
+
+  mongodb:
+    image : mongo
+    container_name: mongodb
+    environment:
+    - PUID=1000
+    - PGID=1000
+    volumes:
+    - mongo_data:/data/db
+    ports:
+    - 27017:27017
+    restart: unless-stopped
+    networks: 
+      mongo_net: 
+        ipv4_address: 192.168.33.3
+
+  mongo_api: 
+    container_name: 'mongo_api'
+    build: ./mongo_api
+    ports: 
+      - "9081:9081"
+    depends_on: 
+      - mongodb
+    networks: 
+      mongo_net:
+         ipv4_address: 192.168.33.4
+      sql_net:
+          ipv4_address: 192.168.32.4
+
+  # __________________________Building the keycloak service__________________________
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment: 
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - KEYCLOAK_FRONTEND_URL=http://localhost:8080/auth
+      - Djboss.http.port=8080
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/auth/"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    networks: 
+      keycloak_net:
+        ipv4_address: 192.168.34.4
+
+
+  #__________________________Building the frontend service__________________________
+  react: 
+    container_name: 'react'
+    build: ../frontend
+    ports: 
+      - "3000:3000"
+
+  #__________________________Building the sentiment analyzer service__________________________
+  sentiment1:
+    build: ./sentapi
+    container_name: 'sentiment1'
+    depends_on:
+       rabbitmq:
+        condition: service_healthy
+    networks:
+      - network
+      - mongo_net
+    volumes:
+      - shared_files:/app/tmp
+
+
+
+# Defining the commons network
+networks:
+  network:
+    ipam:
+      config:
+        - subnet: 192.168.48.0/24
+          gateway: 192.168.48.1
+  sql_net: 
+    ipam:
+      config:
+        - subnet: 192.168.32.0/24
+          gateway: 192.168.32.1
+  mongo_net: 
+    ipam:
+      config:
+        - subnet: 192.168.33.0/24
+          gateway: 192.168.33.1
+  keycloak_net: 
+    ipam:
+      config:
+        - subnet: 192.168.34.0/24
+          gateway: 192.168.34.1        
+
+# Defining the commons volume
+volumes:
+  shared_files:
+    external: true
+  mssqldata:
+  mongo_data:
+
+# Some useful commands:
+
+#docker network create rabbitmq_go_net
+#sudo docker-compose up -d --build
+
+#sudo service rabbitmq-server start
+#sudo service rabbitmq-server stop
+
+#docker exec -it faa ping another;      para hacer ping entre containers
