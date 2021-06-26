@@ -18,7 +18,7 @@ Proyecto 3 - Arquitectura de Software
 |:--:|
 |**Figure 3**: Component diagram.| 
 
-## Level 4: Pipeline diagram
+## Pipeline diagram
 |![](images/pipeline-diagram.jpeg)|
 |:--:|
-|**Figure 4**: Component diagram.| 
+|**Figure 4**: Pipeline diagram.| 
