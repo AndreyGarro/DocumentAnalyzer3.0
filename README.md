@@ -14,7 +14,7 @@ Proyecto 3 - Arquitectura de Software
 |**Figure 2**: Container diagram.|
 
 ## Level 3: Component diagram
-|![](images/component--diagram.jpeg)|
+|![](images/component-diagram.jpeg)|
 |:--:|
 |**Figure 3**: Component diagram.| 
 
